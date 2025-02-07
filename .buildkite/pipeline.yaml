@@ -4,10 +4,11 @@ steps:
     key: generate-logs
     command: |
       echo "What is my purpose?"
-      echo "You pass butter."
+      echo ">You ~pass butter~ list directories."
+      ls -lA /var/log
     artifact_paths: [/var/log]
   - label: ':mag: Retrieve logs'
     depends_on: generate-logs
     command: |-
       echo "--- Testing buildkite-agent method"
-      buildkite-agent artifact download var/log/* log-output-dir/
+      buildkite-agent artifact download var/log/ .
