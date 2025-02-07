@@ -21,14 +21,14 @@ steps:
       # Method 1: Using curl + jq
       echo "--- Testing curl + jq method"
       STEP_URL="https://api.buildkite.com/v2/organizations/$BUILDKITE_ORGANIZATION_SLUG/pipelines/$BUILDKITE_PIPELINE_SLUG/builds/$BUILDKITE_BUILD_NUMBER"
-      curl -H "Authorization: Bearer $API_TOKEN" "$${STEP_URL}/jobs/$BUILDKITE_JOB_ID/log" | tee jq -r '.content' > curl_cleaned_logs.txt
+      curl -H "Authorization: Bearer $API_TOKEN" "$${STEP_URL}/jobs/$BUILDKITE_JOB_ID/log" | jq -r '.content' > curl_cleaned_logs.txt
       check_if_empty curl_cleaned_logs
 
       # Method 2: Using sed
       echo "--- Testing sed method"
       curl -H "Authorization: Bearer $API_TOKEN" "$${STEP_URL}/jobs/$BUILDKITE_JOB_ID/log" > raw_logs.txt
       check_if_empty raw_logs
-      sed -e 's/\\n/\n/g' -e 's/\\r//g' -e 's/\\t/\t/g' raw_logs.txt | tee sed_cleaned_logs.txt
+      sed -e 's/\\n/\n/g' -e 's/\\r//g' -e 's/\\t/\t/g' raw_logs.txt | sed_cleaned_logs.txt
       check_if_empty sed_cleaned_logs
 
       # Method 3: Using buildkite-agent
