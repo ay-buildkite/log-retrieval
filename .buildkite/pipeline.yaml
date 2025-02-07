@@ -7,7 +7,7 @@ steps:
       echo ">You ~pass butter~ list directories."
       ls -lA /var/log/*.log
       cp /var/log/*.log .
-    artifact_paths: [*.log]
+    artifact_paths: ['*.log']
   - label: ':mag: Retrieve logs'
     depends_on: generate-logs
     command: |-
