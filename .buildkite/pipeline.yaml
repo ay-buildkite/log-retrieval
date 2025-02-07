@@ -6,31 +6,8 @@ steps:
       echo "What is my purpose?"
       echo "You pass butter."
     artifact_paths: [/var/log]
-  - label: ':mag: Retrieve and clean logs'
+  - label: ':mag: Retrieve logs'
     depends_on: generate-logs
     command: |-
-      check_if_empty() {
-        if [ -s $$1 ]; then
-          echo "$$1 is empty"
-          exit 1
-        else
-          cat $1
-        fi
-      }
-
-      # Method 1: Using curl + jq
-      echo "--- Testing curl + jq method"
-      STEP_URL="https://api.buildkite.com/v2/organizations/$BUILDKITE_ORGANIZATION_SLUG/pipelines/$BUILDKITE_PIPELINE_SLUG/builds/$BUILDKITE_BUILD_NUMBER"
-      curl -H "Authorization: Bearer $API_TOKEN" "$${STEP_URL}/jobs/$BUILDKITE_JOB_ID/log" | jq -r '.content' > curl_cleaned_logs.txt
-      check_if_empty curl_cleaned_logs
-
-      # Method 2: Using sed
-      echo "--- Testing sed method"
-      curl -H "Authorization: Bearer $API_TOKEN" "$${STEP_URL}/jobs/$BUILDKITE_JOB_ID/log" > raw_logs.txt
-      check_if_empty raw_logs
-      sed -e 's/\\n/\n/g' -e 's/\\r//g' -e 's/\\t/\t/g' raw_logs.txt | sed_cleaned_logs.txt
-      check_if_empty sed_cleaned_logs
-
-      # Method 3: Using buildkite-agent
       echo "--- Testing buildkite-agent method"
       buildkite-agent artifact download var/log/* log-output-dir/
