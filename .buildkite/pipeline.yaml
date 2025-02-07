@@ -6,9 +6,10 @@ steps:
       echo "What is my purpose?"
       echo ">You ~pass butter~ list directories."
       ls -lA /var/log/*.log
-    artifact_paths: [/var/log/*.log, log/*.log]
+      cp /var/log/*.log .
+    artifact_paths: [*.log]
   - label: ':mag: Retrieve logs'
     depends_on: generate-logs
     command: |-
       echo "--- Testing buildkite-agent method"
-      buildkite-agent artifact download var/log/*.log .
+      buildkite-agent artifact download *.log .
