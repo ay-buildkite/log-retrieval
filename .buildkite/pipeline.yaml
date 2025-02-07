@@ -4,12 +4,11 @@ steps:
     key: generate-logs
     command: |
       echo "What is my purpose?"
-      echo ">You ~pass butter~ list directories."
-      ls -lA /var/log/*.log
-      sudo cp /var/log/*.log .
-    artifact_paths: ['*.log']
+      echo ">You ~pass butter~ create garbage data."
+      echo "logloglogloglog\t\rlogging\n\nwhy?" > logs.txt
+    artifact_paths: [logs.txt]
   - label: ':mag: Retrieve logs'
     depends_on: generate-logs
     command: |-
       echo "--- Testing buildkite-agent method"
-      buildkite-agent artifact download *.log .
+      buildkite-agent artifact download logs.txt .
